@@ -1,0 +1,59 @@
+---
+title: "SGupta_HW03Question2"
+format: pdf
+editor: visual
+---
+
+## Question 2
+
+# Test the hypothesis that βSalary = 0. Test the hypothesis that βsalary= βratio = βexpend = 0
+
+```{r}
+library(faraway)
+set.seed(1001)
+data(sat)
+head(sat)
+model1 <- lm(total ~ expend + ratio + salary, data = sat)
+summary(model1)
+
+```
+
+```{r}
+# Extract t-statistic and p-value for salary
+summary(model1)$coefficients["salary", ]
+
+```
+
+The p value for salary predictor variable is 0.06 which is slightly higher than 0.05 significance level. Therefore we do no have enough evidence to reject null hypothesis. There is evidence that salary has no effect on SAT score.
+
+Testing beta coefficients for expend, ratio and salary all are zero –\> We can use the F-test to check if all predictors has any effect on the response variable. The F statistic value is 0.01 which is less than significant level therefore we reject the null hypothesis that all coefficients are zero. Alteast one of the predictor variable has an effect on the SAT score.
+
+-   expend: = p = 0.4589 - not significant
+
+-   ratio: = p = 0.3383 - not significant
+
+-   salary: = p = 0.0667 marginal significance at the 10% level, but not at the 5% level
+
+# Now add takers to the model. Test the hypothesis that βsalary = 0.
+
+```{r}
+data(sat)
+model2 <- lm(total ~ expend + ratio + salary + takers, data = sat)
+summary(model2)
+
+```
+
+```{r}
+summary(model2)$coefficients["salary", ]
+
+```
+
+Since the p-value (0.4962) is much greater than significance level, we fail to reject the null hypothesis After accounting for the takers predictors in model2, salary does not appear to have a significant effect on the response.
+
+```{r}
+anova(model1, model2)
+
+```
+
+-   Model 1: total∼expend+ratio+salarytotal∼expend+ratio+salary
+-   Model 2:total∼expend+ratio+salary+takerstotal∼expend+ratio+salary+takers The RSS is reduced in model 2 and this is the extra variation by including the variable takers.The associated p value in model 2 is extremely small which indicates adding takers predictor variable significantly improved model.

@@ -1,0 +1,60 @@
+---
+title: "SGupta_HW02Question2"
+format: pdf
+editor: visual
+---
+
+```{r}
+# Load necessary library
+library(faraway)
+# Load the dataset
+data(teengamb)
+head(teengamb)
+
+# Fit the regression model
+model <- lm(gamble ~ sex + status + income + verbal, data = teengamb)
+# (a)Display the model summary
+summary(model)
+
+rsquared <- summary(model)$r.squared
+print(paste("Percentage of variation explained:", rsquared * 100, "%"))
+
+# Get residuals
+residuals <- model$residuals
+
+# (b) Find the index of the largest positive residual
+largest_residual_number <- which.max(residuals)
+print(paste("Largest positive residual:", max(residuals) ))
+print(paste("Observation with the largest positive residual:", largest_residual_number ))
+
+
+# (c) Mean and median of residuals
+mean_residual <- mean(residuals)
+median_residual <- median(residuals)
+
+print(paste("Mean of residuals:", mean_residual ))
+print(paste("Median of residuals:", median_residual ))
+
+
+# Get fitted values
+values <- model$fitted.values
+
+# (d) Compute correlation
+correlation1 <- cor(residuals, values)
+print(paste("Correlation of residuals with fitted values:", correlation1 ))
+
+
+# (e) Compute correlation
+correlation2 <- cor(residuals, teengamb$income)
+print(paste("Correlation of residuals with income:", correlation2 ))
+
+
+# (f) Extract the coefficient for sex
+sex_coefficient <- coef(model)["sex"]
+print(paste("Difference in predicted expenditure for males vs. females:", sex_coefficient ))
+
+
+
+
+
+```

@@ -1,0 +1,109 @@
+---
+title: "SGupta_HW03Question3"
+format: pdf
+editor: visual
+---
+
+## Question 3
+
+# Fit a model with lpsa as the response and l cavol as the predictor.
+
+```{r}
+library(faraway)
+set.seed(1001)
+data(prostate)
+names(prostate) 
+model1 <- lm(lpsa ~ lcavol, data = prostate)
+summary1 <- summary(model1)
+summary1
+```
+
+# Record the residual standard error and the R2.
+
+```{r}
+
+rse <- summary(model1)$sigma
+r2 <- summary(model1)$r.squared
+
+print(paste("Residual Standard Error:", rse))
+print(paste("Multiple R-squared:", r2))
+
+
+```
+
+# Now add lweight, svi, lpph, age, lcp, pgg45 and gleason to the model one at a time
+
+```{r}
+model2 <- lm(lpsa ~ lcavol + lweight, data = prostate)
+summary2 <- summary(model2)
+
+model3 <- lm(lpsa ~ lcavol + lweight + svi, data = prostate)
+summary3 <- summary(model3)
+
+model4 <- lm(lpsa ~ lcavol + lweight + svi + lbph, data = prostate)
+summary4 <- summary(model4)
+
+model5 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age, data = prostate)
+summary5 <- summary(model5)
+
+model6 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age + lcp, data = prostate)
+summary6 <- summary(model6)
+
+model7 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age + lcp + pgg45, data = prostate)
+summary7 <- summary(model7)
+
+model8 <- lm(lpsa ~ lcavol + lweight + svi + lbph + age + lcp + pgg45 + gleason, data = prostate)
+summary8 <- summary(model8)
+
+
+```
+
+```{r}
+rse <- c(s1 = summary1$sigma,
+         s2 = summary2$sigma,
+         s3 = summary3$sigma,
+         s4 = summary4$sigma,
+         s5 = summary5$sigma,
+         s6 = summary6$sigma,
+         s7 = summary7$sigma,
+         s8 = summary8$sigma)
+
+r2 <- c(s1 = summary1$r.squared,
+        s2 = summary2$r.squared,
+        s3 = summary3$r.squared,
+        s4 = summary4$r.squared,
+        s5 = summary5$r.squared,
+        s6 = summary6$r.squared,
+        s7 = summary7$r.squared,
+        s8 = summary8$r.squared)
+
+rse
+r2
+
+```
+
+
+# Plot the trends in these two statistics
+
+```{r}
+models <- 1:8
+plot(models, rse, type="b", pch=19, col="blue",
+     xlab="Model with number of predictors added)", ylab="Residual Standard Error",
+     main="Trend in RSE as Predictors added in model")
+
+plot(models, r2, type="b", pch=19, col="red",
+     xlab="Model with number of predictors added)", ylab="R Squared",
+     main="Trend in R2 as Predictors added in model")
+
+
+```
+
+Residual Standard Error (RSE): The RSE generally decreases as more predictors are added.
+A lower RSE indicates that the model’s predictions are closer to the actual observed values. 
+
+R square : The R square generally increases as more predictors are added, because R square can never decrease when more terms are added to a linear regression model.
+The increase in R square shows that the added predictors explain additional variability in the response. 
+After a certain point, each predictor addition only slightly affect R square. That means most of the significant variation is captures in the early predictors. 
+
+
+

@@ -1,0 +1,52 @@
+---
+title: "SGupta_HW02Question3"
+format: pdf
+editor: visual
+---
+
+
+
+```{r}
+# Load necessary library
+library(faraway)
+
+set.seed(42)  # Set the seed
+# Load the dataset
+data(uswages)
+head(uswages)
+
+# Fit the model with weekly wages
+model_wage <- lm(wage ~ educ + exper, data = uswages)
+# Summary of the model
+summary(model_wage)
+
+# Fit the model with logged weekly wages
+model_log_weekly_wages <- lm(log(wage) ~ educ + exper, data = uswages)
+
+# Summary of the model
+summary(model_log_weekly_wages)
+
+
+
+```
+
+## Model 1: Weekly Wages
+## The regression equation is: wage = -242.7994 + 51.1753 ⋅ educ + 9.7748 ⋅ exper
+## Intercept (−242.7994): When education and experience are both 0, the predicted weekly wage is −242.80. 
+## Coefficient for educ (51.1753): For each additional year of education, the weekly wage increases by approximately $51.18
+## Coefficient for exper (9.7748): For each additional year of experience, the weekly wage increases by approximately $9.77
+## R-squared: 0.1351 (13.51%) of the variation in weekly wages is explained by education and experience.
+
+## Model 2: Logged Weekly Wages
+## The regression equation is:  log(wage) = 4.6503 + 0.0905⋅educ + 0.0181⋅exper
+## Intercept (4.6503): When education and experience are 0, the predicted log(wage) is 4.6503. 
+## Coefficient for educ (0.0905): For each additional year of education, the weekly wage increases by approximately 9.05%
+## Coefficient for exper (0.0181): For each additional year of experience, the weekly wage increases by approximately 1.81%
+## R-squared: 0.1749 (17.49%) of the variation in logged weekly wages is explained by education and experience.
+
+## Model with Weekly Wages provides an absolute change in wages (in dollars) for each additional year of education or experience. Example: An additional year of education increases wages by $51.18.
+## Model with Logged Weekly Wages provides a percentage change in wages for each additional year of education or experience. Example: An additional year of education increases wages by 9.05%.
+
+## The logged weekly wages model provides a more natural interpretation:
+## It reflects proportional changes in wages, which consider the real-world income growth trends.
+## It also consider that income is not linear and may exponentially with factors like education.

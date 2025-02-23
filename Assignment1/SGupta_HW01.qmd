@@ -1,0 +1,120 @@
+---
+title: "SGupta_HW01"
+format: pdf
+editor: visual
+---
+
+## ST503 Assignment 1
+
+## Running Code
+
+##  (A) Write a brief description of the dataset. Produce some numerical and graphical summaries of the dataset.
+```{r}
+ #install.packages('faraway')
+```
+
+```{r} 
+    library(faraway)
+    data(teengamb)
+    str(teengamb)
+    print("Print Summary")
+    summary(teengamb)
+    print("Print top 5 values")
+    head(teengamb)
+```
+
+## The dataset contains 47 observations of 5 variables:
+##  sex: Binary variable (0 = Male, 1 = Female)
+##  status: ranges from 18 to 75, with a mean of 45.23.
+##  income: ranges from 0.6 to 15, with a mean of 4.64.
+##  verbal: ranges from 1 to 10, with a mean of 6.66.
+## gamble: ranges from 0 to 156, with a mean of 19.3.
+
+
+## (B) Fit a linear model using the lm() function with gample variable as response, and the income variable as predictors, and report the regression coefficients
+
+```{r} 
+    model <- lm(gamble ~ income, data = teengamb)
+    summary(model)$coefficients
+
+```
+
+
+## (C) Write the mathematical form of the model you fit in part (B). Clearly define each component in your model.
+
+## The fitted model: y hat = beta 0 + beta 1 * income 
+## Beta 0 is the intercept 
+## Beta 1 is the slope 
+
+## The regression coefficients are :
+  
+## The intercept is -6.324559
+## And the slope coefficient is 5.520485
+## The required regression equation is y hat = -6.324559 + 5.520485 * income 
+
+##(D) Further numerical investigation: compute the mean and standard deviation of gamble and income for males (sex=0) and females (sex = 1) separately. Comment on the results.
+
+``` {r}
+    male_dataset <- teengamb[teengamb$sex == 0, ]
+    female_dataset <- teengamb[teengamb$sex == 1, ]
+
+    mean_sd <- data.frame(
+      combined_dataset = c("Males", "Females"),
+      mean_gamble = c(mean(male_dataset$gamble), mean(female_dataset$gamble)),
+      sd_gamble = c(sd(male_dataset$gamble), sd(female_dataset$gamble)),
+      mean_income = c(mean(male_dataset$income), mean(female_dataset$income)),
+      sd_income = c(sd(male_dataset$income), sd(female_dataset$income))
+    )
+    print(mean_sd)
+
+
+```
+
+
+## Gambling Behavior:
+## Males have a significantly higher average gambling expense (29.78) compared to females (3.87)
+## Males have a significantly higher Gambling variability (SD) (37.32) than for females (5.15).
+## Income:
+## Males have a slightly higher average income (4.98) compared to females (4.15).
+## Income variability is also greater for males (4.09) than for females (2.60).
+## Males show both higher and more variable gambling expense and income compared to females.
+
+
+
+## (E) Fit the same linear regression as in part (B), but separately for male and females. Report the regression coefficients.
+
+``` {r}
+    
+    male_dataset <- teengamb[teengamb$sex == 0, ]
+    female_dataset <- teengamb[teengamb$sex == 1, ]
+    
+    male_model <- lm(gamble ~ income, data = male_dataset)
+    female_model <- lm(gamble ~ income, data = female_dataset)
+
+    summary(male_model)
+    summary(female_model)
+
+```
+
+## The regression coefficients for males
+## The intercept is -2.660
+## And the slope coefficient is 6.518
+## The required regression equation for male is y hat =  -2.660 + 6.518 * income 
+
+## The regression coefficients for females
+## The intercept is 
+## And the slope coefficient is .
+## The required regression equation for female is, y hat =  3.1400 + 0.1749 * income 
+
+
+## (F) Create a scatterplot between gamble (in y axis) and income (x axis), and color the points by sex. Then add two fitted regression lines from part (E) to the plot. Comment on the results.
+
+``` {r}
+    plot(teengamb$income, teengamb$gamble, col = teengamb$sex + 1)
+    abline(male_model, col = "blue")
+    abline(female_model, col = "red")
+```
+
+## If there is an upward trend rising from left-hand corner to upper right-hand corner, the correlation also looks like positive. If there is a downward trend, the correlation is negative.
+## The males data show a strong positive correlation in the gambling expense as the income also increases. 
+## While females are little bit consistent and show less gambling behavior, irrespective of income.

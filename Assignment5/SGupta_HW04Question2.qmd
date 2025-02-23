@@ -1,0 +1,136 @@
+---
+title: "SGupta_HW04Question2"
+format: pdf
+editor: visual
+---
+
+## Quarto
+
+model = β0 + β1(expend) + β2(salary) + β3(ratio) + β4(takers) + e Linear Regression Model
+
+-   β₀: Intercept (baseline total SAT score)
+-   β₁: Effect of expenditure per student (expend) on total SAT
+-   β₂: Effect of teacher salary on total SAT
+-   β₃: Effect of student-teacher ratio on total SAT
+-   β₄: Effect of the proportion of students taking the test (takers)
+-   e: Error term capturing variability not explained by the predictors
+
+```{r}
+# Load necessary libraries
+library(faraway)
+
+set.seed(42)
+data(sat)
+head(sat)
+
+# Fit the model
+sat_lm <- lm(total ~ expend + salary + ratio + takers, data = sat)
+
+# Print summary
+summary(sat_lm)
+
+
+```
+
+# (a) Check the constant variance assumption for the errors.
+
+```{r}
+# (a) Check constant variance
+# Standardized residuals and fitted values
+res_std <- rstandard(sat_lm)
+fitted_vals <- fitted(sat_lm)
+
+# Plot: Standardized Residuals vs Fitted Values
+par(mfrow=c(1,1))
+plot(fitted_vals, res_std,
+     xlab = "Fitted Values",
+     ylab = "Standardized Residuals",
+     main = "Residuals vs Fitted Values",
+     pch = 19)
+abline(h = 0, col = "red", lwd = 2)
+
+```
+
+# (b) Check the normality assumption.
+
+```{r}
+# (b) Check normality
+# Histogram of standardized residuals with normal curve
+hist(res_std, probability = TRUE, 
+     main = "Histogram of Standardized Residuals", 
+     xlab = "Standardized Residuals", col = "lightblue", border = "black")
+curve(dnorm(x), add = TRUE, col = "red", lwd = 2)
+
+```
+
+```{r}
+qqnorm(res_std, main = "Normal Q-Q Plot")
+qqline(res_std, col = "red", lwd = 2)
+
+```
+
+```{r}
+shapiro.test(res_std)
+
+
+```
+
+# (c) Check for large leverage points.
+
+```{r}
+# (c) Check for large leverage points
+# Calculate leverage values
+lev <- hatvalues(sat_lm)
+
+# Plot leverage values
+plot(lev, type = "h", 
+     main = "Leverage Values", 
+     xlab = "Observation Index", 
+     ylab = "Leverage", lwd = 2)
+abline(h = 2*mean(lev), col = "red", lwd = 2, lty = 2)
+text(x = which(lev > 2*mean(lev)), 
+     y = lev[lev > 2*mean(lev)], 
+     labels = which(lev > 2*mean(lev)), pos = 3, col = "blue")
+
+```
+
+# (d) Check for serial correlation in the errors.
+
+```{r}
+library(lmtest)
+# (d) Check for serial correlation
+# Index plot of residuals
+plot(res_std, type = "b", 
+     main = "Index Plot of Residuals", 
+     xlab = "Index", 
+     ylab = "Standardized Residuals", pch = 19)
+abline(h = 0, col = "red", lwd = 2)
+
+# Load lmtest package for Durbin-Watson test
+dwtest(sat_lm)
+
+
+```
+
+### Summary
+
+-   **Model Fit:**\
+    – The estimated regression equation is:\
+    total = 1045.97 + 4.46·expend + 1.64·salary – 3.62·ratio – 2.90·takers + e\
+    – Only the coefficient for takers is highly significant (p \< 2.6e-16), while the other predictors are not statistically significant.\
+    – The model explains about 82.5% of the variability in total SAT scores (R\^2 = 0.8246).
+
+-   **Constant Variance:**\
+    – The plot of standardized residuals versus fitted values shows no obvious pattern or funneling, which supports the homoscedasticity (constant variance) assumption.
+
+-   **Normality:**\
+    – The histogram of standardized residuals, overlaid with a normal density curve, and the corresponding Q–Q plot both indicate that the residuals are approximately normally distributed.\
+    – The Shapiro–Wilk test (W = 0.98021, p = 0.5607) confirms that there is no strong evidence against normality.
+
+-   **Leverage:**\
+    – A leverage plot was used to flag observations with unusually high leverage ( above twice the average leverage).\
+    – Observations (indices 5, 7, 30, and 44) are identified as having high leverage, suggesting these cases should be reviewed further for their influence on the model.
+
+-   **Serial Correlation:**\
+    – An index plot of residuals shows no systematic pattern over the order of observations.\
+    – The Durbin–Watson test yields a statistic of 2.4525 with a p-value of 0.9459, indicating no significant autocorrelation in the residuals.

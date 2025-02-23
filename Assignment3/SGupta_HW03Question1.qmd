@@ -1,0 +1,52 @@
+---
+title: "SGupta_HW03Question1"
+format: pdf
+editor: visual
+---
+
+## Question 1
+
+# (a) Which variables are statistically significant?
+
+```{r}
+library(faraway)
+data(teengamb)
+head(teengamb)
+
+# Fit the full model
+model <- lm(gamble ~ sex + status + income + verbal, data = teengamb)
+summary(model)
+```
+
+Considering α = 0.05, sex is statistically significant as the p value 0.01 is less than 0.05.
+
+Status is insignificant is this model preparation as the p value 0.8 is higher than alpha level.
+
+income is highly significant. its p value is only 0.000017
+
+And verbal is also not significant.
+
+# (b) What interpretation should be given to the coefficient for sex?
+
+```{r}
+summary(model)$coefficients["sex", c("Estimate", "Std. Error","t value", "Pr(>|t|)")]
+```
+
+A unit increase in sex variable is associated with an average decrease in response variable gamble by about 22.12 units. A female variable tends to gamble less than male by 22.12 units.
+
+# (c) Fit a model with just income as a predictor and use an F-test to compare it to the full model.
+
+```{r}
+model_income <- lm(gamble ~ income, data = teengamb)
+
+anova(model_income, model)
+
+```
+
+-   The F-statistic is about 4.133 with 3 and 42 degrees of freedom.
+
+-   The associated p-value is approximately 0.01177
+
+-   The RSS difference between the two models is 6,384.8. This is due to the extra variables (variations) by adding the predictors sex, status, and verbal in the full model.
+
+-   Since the p-value (0.01177) is less than the significance level (0.05), we reject the null hypothesis that the extra predictors (sex, status, and verbal) contribute no additional significance over the income-only model.

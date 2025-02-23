@@ -1,0 +1,39 @@
+---
+title: "SGupta_HW02Question1"
+format: pdf
+editor: visual
+---
+
+
+```{r}
+#install.packages("estimability")
+library(estimability)
+
+# Define the model matrix X
+X <- matrix(c(1, 1, 0, 1, 0, 0,
+              1, 1, 0, 0, 1, 0,
+              1, 1, 0, 0, 0, 1,
+              1, 0, 1, 1, 0, 0,
+              1, 0, 1, 0, 1, 0,
+              1, 0, 1, 0, 0, 1), nrow = 6, byrow = TRUE)
+
+# Define the coefficient vector c for α1 - α2
+cvec1 <- c(0, 1, -1, 0, 0, 0)
+
+# Define the coefficient vector c for β1 - 2β2 + β3
+cvec2 <- c(0, 0, 0, 1, -2, 1)
+
+# Create the basis for the null space of X^T
+nb <- nonest.basis(X)
+#print(nb)
+
+# Check if cvec_alpha and cvec_beta are orthogonal to the null space
+print("Checking if α1 - α2 is estimable:")
+result1 <- is.estble(cvec1, nb)
+print(paste("Is α1 - α2 estimable?", result1))
+
+print("Checking if β1 - 2β2 + β3 is estimable:")
+result2 <- is.estble(cvec2, nb)
+print(paste("Is β1 - 2β2 + β3 estimable? ", result2))
+```
+
